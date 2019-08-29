@@ -1,4 +1,4 @@
-OpenDTAM for Opencv 3.1
+OpenDTAM for Opencv 4.1
 ========
 
 An open source implementation of DTAM
@@ -7,64 +7,95 @@ Based on Newcombe, Richard A., Steven J. Lovegrove, and Andrew J. Davison's "DTA
 
 This project depends on qtbase5-dev, [OpenCV 3](https://github.com/Itseez/opencv "OpenCV") and [Cuda](https://developer.nvidia.com/cuda-downloads "Cuda").
 
-## Build Instructions on Ubuntu 16.04
+## Build Instructions on Ubuntu 18.04
 
 Tested in this environment
 
-* Ubuntu 16.04 x64
-* GCC 5.4.0
-* Boost 1.5.8
-* OpenCV 3.1
-* Cuda Toolkit 7.5
+* Ubuntu 18.04 x64
+* GCC 7.4 for C++
+* GCC 6.5 for CUDA
+* Boost 1.65
+* OpenCV 4.1.1
+* Cuda Toolkit 9.1
+* GTX-970m sm-52
 
-### Install dependencies
+### Install dependencies From Ubuntu 18.04 repository
 
 #### qtbase5-dev
 
-```bash
-sudo apt-add-repository ppa:ubuntu-sdk-team/ppa
-sudo apt-get update
-sudo apt-get install qtbase5-dev
-```
+#### libboost-dev
 
-#### boost
-
-```bash
-sudo apt-get install libboost-system-dev libboost-thread-dev
-```
+#### libgstreamer1.0-dev
 
 #### Cuda
 
-Version 7.5 was used. 
+Version 9.1 was used, from the Ubuntu nvidia-driver-390.deb and associated nvidia-compute-utils-390 etc.
 
-You can use the pre-built downloads from [NVIDIA](https://developer.nvidia.com/cuda-downloads "Cuda"), or you can follow this guide:
 
-[Cuda Installation Tutorial](https://www.pugetsystems.com/labs/hpc/NVIDIA-CUDA-with-Ubuntu-16-04-beta-on-a-laptop-if-you-just-cannot-wait-775/ "Cuda Installation Tutorial")
+#### OpenCV 4, OpenCV_Contrib (CudaImgProc module is required), and opencv_extra (data for unit tests)
 
-#### OpenCV 3
-
-These lines were mostly stitched together from the [caffee installation guide](https://github.com/BVLC/caffe/wiki/Ubuntu-16.04-or-15.10-OpenCV-3.1-Installation-Guide "caffe installation guide")
-
-```bash
-# Execute first command from directory you would like to clone OpenCV
 git clone https://github.com/opencv/opencv.git
-cd opencv
-# make sure to use version 3.1.0
-git checkout tags/3.1.0
-mkdir build
-cd build
-cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D WITH_TBB=ON -D WITH_V4L=ON -D WITH_QT=ON -D WITH_OPENGL=ON -DCUDA_NVCC_FLAGS="-D_FORCE_INLINES" ..
-make -j4
-sudo make install
-```
+
+git clone https://github.com/opencv/opencv_contrib.git
+
+git clone https://github.com/opencv/opencv_extra.git
+
+```cd opencv 
+git checkout tags/4.1.1 
+mkdir build 
+cd build 
+cmake_gui ../ ```
+
+You will need to provide the path to opencv_contrib and to opencv_extra/testdata .
+
+You will need to specify WITH CUDA and CUFFT 
+
+Set the CUDA_ARCH_BIN to the 'compute capability' of you Nvidia GPU. '52' for GTX-9xx series GPUs.
+
+Set the CUDA_HOST_COMPILER to one that is compatible with your version of CUDA. 'gcc-6' or lower for CUDA 9.1 .
+
+See the OpenCV-4-CMakeCache.txt in this directory for the full parameters as tested. 
+
+```make -j8 ```(set to your number of CPU cores)
+
+
+#### Run the unit tests
+
+```make check ```(to run unit tests), 
+
+especially run 
+
+```build/bin/opencv_test_videoio ``` 
+
+and 
+
+```build/bin/opencv_test_cudaimgproc ``` .
+
+If these tests fail, you will probably have to add specific libraries _and_ their headers (packages ending in '-dev.deb' ) .
+
+If you are using a Debian or Ubuntu dervived Linux distro, it is recommended to use Synaptic Package Manager to find and install packages.
+
+
+#### Install OpenCV-4
+
+When the tests work, 
+
+```sudo make install ```
+
 
 ### Build OpenDTAM
-```bash
+
+```
 cd OpenDTAM
 mkdir build
 cd build
-cmake ../Cpp
-make -j4
+cmake_gui ../Cpp
+
+Set the CUDA_ARCH_BIN to the 'compute capability' of you Nvidia GPU. '52' for GTX-9xx series GPUs.
+
+Set the CUDA_HOST_COMPILER to one that is compatible with your version of CUDA. 'gcc-6' or lower for CUDA 9.1 .
+
+make -j8
 ````
 
 ### Run OpenDTAM
