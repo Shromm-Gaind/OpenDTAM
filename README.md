@@ -61,7 +61,8 @@ See the OpenCV-4-CMakeCache.txt in this directory for the full parameters as tes
 
 ```
 make -j8 
-```(set to your number of CPU cores)
+```
+(set to your number of CPU cores)
 
 
 #### Run the unit tests
