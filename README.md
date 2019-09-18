@@ -5,6 +5,9 @@ An open source implementation of DTAM
 
 Based on Newcombe, Richard A., Steven J. Lovegrove, and Andrew J. Davison's "DTAM: Dense tracking and mapping in real-time."
 
+=======
+This project depends on qtbase5-dev, [OpenCV 4](https://github.com/Itseez/opencv "OpenCV") and [Cuda](https://developer.nvidia.com/cuda-downloads "Cuda").
+
 ## Build Instructions on Ubuntu 18.04
 
 Tested in this environment
