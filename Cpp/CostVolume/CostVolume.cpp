@@ -55,6 +55,7 @@ void CostVolume::checkInputs(const cv::Mat& R, const cv::Mat& T,
 
 #define FLATUP(src,dst){GpuMat tmp;tmp.upload(src);dst.create(1,rows*cols, src.type());dst=dst.reshape(0,rows);}
 #define FLATALLOC(n) n.create(1,rows*cols, CV_32FC1);n=n.reshape(0,rows)
+
 CostVolume::CostVolume(Mat image, FrameID _fid, int _layers, float _near,
         float _far, cv::Mat R, cv::Mat T, cv::Mat _cameraMatrix,
         float initialCost, float initialWeight): R(R),T(T),initialWeight(initialWeight) {
@@ -72,16 +73,16 @@ CostVolume::CostVolume(Mat image, FrameID _fid, int _layers, float _near,
     far           = _far;
     depthStep     = (near - far) / (layers - 1);
     cameraMatrix  = _cameraMatrix.clone();
-    solveProjection(R, T);
-    FLATALLOC(lo);
+    solveProjection(R, T);// stored as CostVolume::projection a 4x4 cv::Mat
+    FLATALLOC(lo);                                      //a cv::cuda::GpuMat
     FLATALLOC(hi);
     FLATALLOC(loInd);
-    dataContainer.create(layers, rows * cols, CV_32FC1);
+    dataContainer.create(layers, rows * cols, CV_32FC1);//a cv::cuda::GpuMat
 
     Mat bwImage;
     image=image.reshape(0,1);
     cv::cvtColor(image, bwImage, CV_RGB2GRAY);
-    baseImage.upload(image);
+    baseImage.upload(image);                            //a cv::cuda::GpuMat
     baseImageGray.upload(bwImage);
     baseImage=baseImage.reshape(0,rows);
     baseImageGray=baseImageGray.reshape(0,rows);
@@ -94,16 +95,13 @@ CostVolume::CostVolume(Mat image, FrameID _fid, int _layers, float _near,
 
     count = 0;
 
-    //messy way to disguise cuda objects
+    //messy way to disguise cuda objects     // stored in CostVolume::  (private)
     _cuArray=Ptr<char>((char*)(new cudaArray_t));
     *((cudaArray**)(char*)_cuArray)=0;
     _texObj=Ptr<char>((char*)(new cudaTextureObject_t));
     *((cudaTextureObject_t*)(char*)_texObj)=0;
-    ref=Ptr<char>(new char);
+    ref=Ptr<char>(new char);               
 }
-
-
-
 
 void CostVolume::simpleTex(const Mat& image, Stream cvStream){
     cudaArray_t& cuArray=*((cudaArray_t*)(char*)_cuArray);
@@ -269,7 +267,7 @@ void CostVolume::updateCost(const Mat& _image, const cv::Mat& R, const cv::Mat& 
     float w=count+++initialWeight;//fun parse
     w/=(w+1); 
     assert(localStream);
-    globalWeightedBoundsCostCaller(persp,w,CONST_ARGS);
+    globalWeightedBoundsCostCaller(persp,w,CONST_ARGS);         // calls Cuda Kernel
 
 }
 

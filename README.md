@@ -5,8 +5,6 @@ An open source implementation of DTAM
 
 Based on Newcombe, Richard A., Steven J. Lovegrove, and Andrew J. Davison's "DTAM: Dense tracking and mapping in real-time."
 
-This project depends on qtbase5-dev, [OpenCV 3](https://github.com/Itseez/opencv "OpenCV") and [Cuda](https://developer.nvidia.com/cuda-downloads "Cuda").
-
 ## Build Instructions on Ubuntu 18.04
 
 Tested in this environment
@@ -40,11 +38,13 @@ git clone https://github.com/opencv/opencv_contrib.git
 
 git clone https://github.com/opencv/opencv_extra.git
 
-```cd opencv 
+```
+cd opencv 
 git checkout tags/4.1.1 
 mkdir build 
 cd build 
-cmake_gui ../ ```
+cmake_gui ../ 
+```
 
 You will need to provide the path to opencv_contrib and to opencv_extra/testdata .
 
@@ -56,20 +56,28 @@ Set the CUDA_HOST_COMPILER to one that is compatible with your version of CUDA. 
 
 See the OpenCV-4-CMakeCache.txt in this directory for the full parameters as tested. 
 
-```make -j8 ```(set to your number of CPU cores)
+```
+make -j8 
+```(set to your number of CPU cores)
 
 
 #### Run the unit tests
 
-```make check ```(to run unit tests), 
+```
+make check 
+```(to run unit tests), 
 
 especially run 
 
-```build/bin/opencv_test_videoio ``` 
+```
+build/bin/opencv_test_videoio 
+``` 
 
 and 
 
-```build/bin/opencv_test_cudaimgproc ``` .
+```
+build/bin/opencv_test_cudaimgproc 
+``` .
 
 If these tests fail, you will probably have to add specific libraries _and_ their headers (packages ending in '-dev.deb' ) .
 
@@ -80,7 +88,9 @@ If you are using a Debian or Ubuntu dervived Linux distro, it is recommended to 
 
 When the tests work, 
 
-```sudo make install ```
+```
+sudo make install 
+```
 
 
 ### Build OpenDTAM

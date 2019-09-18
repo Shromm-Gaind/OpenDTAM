@@ -120,9 +120,9 @@ int App_main( int argc, char** argv )
         R=Rs[imageNum].clone();
         image=images[imageNum];
 
-        if(cv.count<imagesPerCV){
+        if(cv.count<imagesPerCV){ /// first it grabs enough frames to build a usable cost volume
             
-            cv.updateCost(image, R, T);
+            cv.updateCost(image, R, T);/// increments cv.count
             cudaDeviceSynchronize();
 //             gpause();
 //             for( int i=0;i<layers;i++){
@@ -131,7 +131,7 @@ int App_main( int argc, char** argv )
 //             }
         }
         else{
-            cudaDeviceSynchronize();
+            cudaDeviceSynchronize();/// if there is a usable cost volume /// build regularized depthmap
             //Attach optimizer
             Ptr<DepthmapDenoiseWeightedHuber> dp = createDepthmapDenoiseWeightedHuber(cv.baseImageGray,cv.cvStream);
             DepthmapDenoiseWeightedHuber& denoiser=*dp;
@@ -154,21 +154,19 @@ int App_main( int argc, char** argv )
 //                waitKey(0);
 //                gpause();
             
-            
-
             bool doneOptimizing; int Acount=0; int QDcount=0;
-            do{
+            do{                                                                     // optimizing the depth map, 
+                                                                    // nb 'A'matrix, 'a' element of the auxiliary variable alpha
+                                                                    // 'd' is the denoiser   
 //                 cout<<"Theta: "<< optimizer.getTheta()<<endl;
 //
 //                 if(Acount==0)
 //                     gpause();
                a.download(ret);
                pfShow("A function", ret, 0, cv::Vec2d(0, layers));
-                
-                
 
                 for (int i = 0; i < 10; i++) {
-                    d=denoiser(a,optimizer.epsilon,optimizer.getTheta());
+                    d=denoiser(a,optimizer.epsilon,optimizer.getTheta());   // 10 iterations of denoiser, fed optimizer.epsilon
                     QDcount++;
                     
 //                    denoiser._qx.download(ret);
@@ -178,7 +176,7 @@ int App_main( int argc, char** argv )
                    d.download(ret);
                    pfShow("D function", ret, 0, cv::Vec2d(0, layers));
                 }
-                doneOptimizing=optimizer.optimizeA(d,a);
+                doneOptimizing=optimizer.optimizeA(d,a);                    // optimizeA(d,a)
                 Acount++;
             }while(!doneOptimizing);
 //             optimizer.lambda=.05;
@@ -192,7 +190,7 @@ int App_main( int argc, char** argv )
 //             pfShow("Depth Solution", optimizer.depthMap(), 0, cv::Vec2d(cv.far, cv.near));
 //             imwrite("outz.png",ret);
             
-            Track tracker(cv);
+            Track tracker(cv);                                    // tracking - find the pose transform to the current frame
             Mat out=optimizer.depthMap();
             double m;
             minMaxLoc(out,NULL,&m);
