@@ -106,13 +106,13 @@ cd OpenDTAM
 mkdir build
 cd build
 cmake_gui ../Cpp
-'''
+```
 
 Set the CUDA_ARCH_BIN to the 'compute capability' of you Nvidia GPU. '52' for GTX-9xx series GPUs.
 
 Set the CUDA_HOST_COMPILER to one that is compatible with your version of CUDA. 'gcc-6' or lower for CUDA 9.1 .
 
-'''
+```
 make -j8
 ````
 
