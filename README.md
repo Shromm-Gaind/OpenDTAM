@@ -107,19 +107,24 @@ mkdir build
 cd build
 cmake_gui ../Cpp
 '''
+
 Set the CUDA_ARCH_BIN to the 'compute capability' of you Nvidia GPU. '52' for GTX-9xx series GPUs.
 
 Set the CUDA_HOST_COMPILER to one that is compatible with your version of CUDA. 'gcc-6' or lower for CUDA 9.1 .
+
 '''
 make -j8
 ````
 
 ### Run OpenDTAM
 For the following command, replace `$TRAJECTORY_30_SECONDS` with the path to the directory of the same name.
+
 ```bash
 ./a.out $TRAJECTORY_30_SECONDS
 ```
+
 Assuming you are executing this command from the build folder, as shown above, enter the following:
+
 ```bash
 ./a.out ../Trajectory_30_seconds
 ```
