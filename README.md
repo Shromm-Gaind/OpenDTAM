@@ -82,7 +82,8 @@ and
 
 ```
 build/bin/opencv_test_cudaimgproc 
-``` .
+``` 
+.
 
 If these tests fail, you will probably have to add specific libraries _and_ their headers (packages ending in '-dev.deb' ) .
 
