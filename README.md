@@ -8,7 +8,7 @@ Based on Newcombe, Richard A., Steven J. Lovegrove, and Andrew J. Davison's "DTA
 =======
 This project depends on qtbase5-dev, [OpenCV 4](https://github.com/Itseez/opencv "OpenCV") and [Cuda](https://developer.nvidia.com/cuda-downloads "Cuda").
 
-## Build Instructions on Ubuntu 18.04
+## Build Instructions on Ubuntu 20.04
 
 Tested in this environment
 
