@@ -1,4 +1,4 @@
-OpenDTAM for Opencv 4.2
+OpenDTAM for Opencv 4.1.2
 ========
 
 An open source implementation of DTAM
