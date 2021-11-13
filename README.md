@@ -1,4 +1,4 @@
-OpenDTAM for Opencv 4.1
+OpenDTAM for Opencv 4.2
 ========
 
 An open source implementation of DTAM
@@ -12,13 +12,13 @@ This project depends on qtbase5-dev, [OpenCV 4](https://github.com/Itseez/opencv
 
 Tested in this environment
 
-* Ubuntu 18.04 x64
+* Ubuntu 20.04 x64
 * GCC 7.4 for C++
 * GCC 6.5 for CUDA
 * Boost 1.65
-* OpenCV 4.1.1
-* Cuda Toolkit 9.1
-* GTX-970m sm-52
+* OpenCV 4.1.2
+* Cuda Toolkit 11
+* RTX 2080TI
 
 ### Install dependencies From Ubuntu 18.04 repository
 
@@ -53,7 +53,7 @@ You will need to provide the path to opencv_contrib and to opencv_extra/testdata
 
 You will need to specify WITH CUDA and CUFFT 
 
-Set the CUDA_ARCH_BIN to the 'compute capability' of you Nvidia GPU. '52' for GTX-9xx series GPUs.
+Set the CUDA_ARCH_BIN to the 'compute capability' of you Nvidia GPU. 
 
 Set the CUDA_HOST_COMPILER to one that is compatible with your version of CUDA. 'gcc-6' or lower for CUDA 9.1 .
 
@@ -108,9 +108,9 @@ cd build
 cmake_gui ../Cpp
 ```
 
-Set the CUDA_ARCH_BIN to the 'compute capability' of you Nvidia GPU. '52' for GTX-9xx series GPUs.
+Set the CUDA_ARCH_BIN to the 'compute capability' of you Nvidia GPU. 
 
-Set the CUDA_HOST_COMPILER to one that is compatible with your version of CUDA. 'gcc-6' or lower for CUDA 9.1 .
+Set the CUDA_HOST_COMPILER to one that is compatible with your version of CUDA. 'gcc-6' or lower for CUDA 11.0.
 
 ```
 make -j8
